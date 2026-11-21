@@ -151,7 +151,10 @@ function App() {
       setNotice(saveNotice)
       return true
     } catch (error) {
-      setNotice(error instanceof Error ? error.message : 'Une erreur est survenue. Réessayez.')
+      const message = error instanceof Error ? error.message : 'Une erreur est survenue. Réessayez.'
+      setNotice(message.includes('row-level security policy')
+        ? 'Les droits administrateur de cette session ne sont pas à jour. Déconnectez-vous, reconnectez-vous, puis réessayez.'
+        : message)
       return false
     } finally {
       setSaving(false)

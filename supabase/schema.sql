@@ -72,3 +72,11 @@ begin
 exception
   when duplicate_object then null;
 end $$;
+
+create extension if not exists pg_cron with schema pg_catalog;
+
+select cron.schedule(
+  'starphone-select-one-product',
+  '0 0 */2 * *',
+  'select id from public.products limit 1;'
+);
