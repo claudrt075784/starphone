@@ -2,7 +2,7 @@ import { StrictMode, useEffect, useRef, useState, type CSSProperties, type FormE
 import { createPortal } from 'react-dom'
 import { createRoot } from 'react-dom/client'
 import { createClient, type Session, type SupabaseClient } from '@supabase/supabase-js'
-import { ArrowDown, ArrowLeft, ArrowUpRight, Check, ChevronLeft, ChevronRight, LoaderCircle, LockKeyhole, LogOut, MapPin, Pencil, Plus, Sparkles, Trash2, X } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowUpRight, Check, ChevronLeft, ChevronRight, LoaderCircle, LockKeyhole, LogOut, MapPin, Music2, Pencil, Plus, Sparkles, Trash2, X } from 'lucide-react'
 import './style.css'
 
 type ProductVariant = {
@@ -189,7 +189,10 @@ function App() {
       <header className="topline">
         <a className="brand" href="/" aria-label="Starphone Paris, accueil">Starphone<span>®</span></a>
         <div className="topline-note"><span className="status-dot" /> PARIS · EST. 1999</div>
-        <a className="instagram-link" href="https://www.instagram.com/starphone_paris/" target="_blank" rel="noreferrer" aria-label="Instagram Starphone Paris"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".7" fill="currentColor" /></svg><span>INSTAGRAM</span><ArrowUpRight size={13} /></a>
+        <div className="topline-socials">
+          <a className="social-link" href="https://www.instagram.com/starphone_paris/" target="_blank" rel="noreferrer" aria-label="Instagram Starphone Paris"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".7" fill="currentColor" /></svg><span>INSTAGRAM</span><ArrowUpRight size={12} /></a>
+          <a className="social-link" href="https://www.tiktok.com/@starphone.paris" target="_blank" rel="noreferrer" aria-label="TikTok Starphone Paris"><Music2 size={15} /><span>TIKTOK</span><ArrowUpRight size={12} /></a>
+        </div>
       </header>
 
       <section className="intro">
@@ -209,7 +212,7 @@ function App() {
         <div className="footer-brand"><span className="brand footer-logo">Starphone<span>®</span></span><span className="footer-tagline">Le luxe d’être unique.</span><span className="footer-since">DEPUIS 1999</span></div>
         <div className="footer-address"><MapPin size={14} /><span>12 avenue Franklin D. Roosevelt<br />75008 Paris · Saint-Philippe-du-Roule</span></div>
         <div className="footer-hours"><span>LUN — SAM</span><span>9H30 — 19H30</span><a href="tel:+33153760500">+33 (0)1 53 76 05 00</a></div>
-        <div className="footer-bottom"><span>© STARPHONE PARIS · NEW TECHNOLOGY EUROPE</span><button className="admin-entry" onClick={() => goAdmin(true)} aria-label="Administration"><LockKeyhole size={12} /> ADMIN</button><a href="https://www.instagram.com/starphone_paris/" target="_blank" rel="noreferrer">INSTAGRAM <ArrowUpRight size={11} /></a><a href="https://www.tiktok.com/@starphone.paris" target="_blank" rel="noreferrer" aria-label="TikTok Starphone Paris">TIKTOK <ArrowUpRight size={11} /></a></div>
+        <div className="footer-bottom"><span>© STARPHONE PARIS · NEW TECHNOLOGY EUROPE</span><button className="admin-entry" onClick={() => goAdmin(true)} aria-label="Administration"><LockKeyhole size={12} /> ADMIN</button><div className="footer-socials"><a className="social-link" href="https://www.instagram.com/starphone_paris/" target="_blank" rel="noreferrer" aria-label="Instagram Starphone Paris"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".7" fill="currentColor" /></svg><span>INSTAGRAM</span><ArrowUpRight size={11} /></a><a className="social-link" href="https://www.tiktok.com/@starphone.paris" target="_blank" rel="noreferrer" aria-label="TikTok Starphone Paris"><Music2 size={14} /><span>TIKTOK</span><ArrowUpRight size={11} /></a></div></div>
       </footer>
 
       {selected && <div className="lightbox" role="dialog" aria-modal="true" aria-label={selected.name} onClick={() => setSelected(null)} onKeyDown={(event) => { if (event.key === 'Escape') setSelected(null) }}>
