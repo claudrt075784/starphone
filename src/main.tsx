@@ -204,7 +204,7 @@ function App() {
       </section>
 
       <section className="collection" id="collection" aria-label="Collection Starphone Paris">
-        <CollectionColumn title="À découvrir" subtitle="LA SÉLECTION" label="01" products={priced} loading={loading} error={loadError} priced onSelect={(product) => { setSelected(product); setSelectedVariantId(product.default_variant_id ?? product.variants?.[0]?.id ?? '') }} />
+        <CollectionColumn title="Pièces d’exception" subtitle="LA SÉLECTION" label="01" products={priced} loading={loading} error={loadError} priced onSelect={(product) => { setSelected(product); setSelectedVariantId(product.default_variant_id ?? product.variants?.[0]?.id ?? '') }} />
         <CollectionColumn title="Pièces d’exception" subtitle="DISPONIBLE AU MAGASIN" label="02" products={unpriced} loading={loading} error={loadError} onSelect={(product) => { setSelected(product); setSelectedVariantId(product.default_variant_id ?? product.variants?.[0]?.id ?? '') }} />
       </section>
 
