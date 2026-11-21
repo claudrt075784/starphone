@@ -3,6 +3,7 @@ create table if not exists public.products (
   name text not null check (length(trim(name)) > 0),
   image_url text not null,
   price numeric(12, 2) check (price is null or price >= 0),
+  payment_url text,
   category text not null default 'priced' check (category in ('priced', 'unpriced')),
   description text not null default '',
   details text not null default '',
@@ -14,6 +15,7 @@ create table if not exists public.products (
 
 alter table public.products add column if not exists description text not null default '';
 alter table public.products add column if not exists details text not null default '';
+alter table public.products add column if not exists payment_url text;
 alter table public.products add column if not exists variants jsonb not null default '[]'::jsonb;
 alter table public.products add column if not exists default_variant_id text;
 

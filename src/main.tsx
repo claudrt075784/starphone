@@ -16,6 +16,7 @@ type Product = {
   name: string
   image_url: string
   price: number | null
+  payment_url: string | null
   category: 'priced' | 'unpriced'
   created_at: string
   description: string
@@ -30,6 +31,16 @@ const supabase: SupabaseClient | null = supabaseUrl && supabaseKey
   ? createClient(supabaseUrl, supabaseKey)
   : null
 const currency = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 })
+
+function normalizePaymentUrl(value: string | null | undefined): string | null {
+  if (!value?.trim()) return null
+  try {
+    const url = new URL(value.trim())
+    return url.protocol === 'https:' && url.hostname ? url.href : null
+  } catch {
+    return null
+  }
+}
 
 function App() {
   const [products, setProducts] = useState<Product[]>([])
@@ -113,6 +124,11 @@ function App() {
       const requestedCategory = String(form.get('category'))
       const category = !rawPrice || requestedCategory === 'unpriced' ? 'unpriced' : 'priced'
       const price = category === 'priced' ? Number(rawPrice) : null
+      const rawPaymentUrl = String(form.get('paymentUrl') ?? '').trim()
+      const paymentUrl = normalizePaymentUrl(rawPaymentUrl)
+      if (rawPaymentUrl && !paymentUrl) {
+        throw new Error('Le lien de paiement doit être une adresse HTTPS valide.')
+      }
       const defaultVariantId = String(form.get('defaultVariant') ?? '')
       const file = form.get('image')
       const uploadImage = async (image: File) => {
@@ -145,6 +161,7 @@ function App() {
         name,
         image_url: imageUrl,
         price,
+        payment_url: paymentUrl,
         category,
         description: String(form.get('description') ?? '').trim(),
         details: String(form.get('details') ?? '').trim(),
@@ -220,9 +237,7 @@ function App() {
       </header>
 
       <section className="intro">
-        <p className="eyebrow"><Sparkles size={13} /> THE ART OF THE EXTRAORDINARY</p>
         <h1>Le luxe <em>d’être unique.</em></h1>
-        <p className="intro-copy">Depuis 25 ans, Starphone Paris cultive l’art de l’inattendu.<br className="desktop-break" /> Technologie, création et pièces de caractère.</p>
         <a className="discover-link" href="#collection">DÉCOUVRIR LA COLLECTION <ArrowDown size={14} /></a>
         <div className="intro-index">48°52′ N<br />02°18′ E</div>
       </section>
@@ -233,10 +248,10 @@ function App() {
       </section>
 
       <footer className="footer">
-        <div className="footer-brand"><span className="brand footer-logo">Starphone<span>®</span></span><span className="footer-tagline">Le luxe d’être unique.</span><span className="footer-since">DEPUIS 1999</span></div>
+        <div className="footer-brand"><span className="brand footer-logo">Starphone<span>®</span></span><span className="footer-tagline">Le luxe d’être unique.</span><span className="footer-since">Depuis 1999</span></div>
         <div className="footer-address"><MapPin size={14} /><span>12 avenue Franklin D. Roosevelt<br />75008 Paris · Saint-Philippe-du-Roule</span></div>
-        <div className="footer-hours"><span>LUN — SAM</span><span>9H30 — 19H30</span><a href="tel:+33153760500">+33 (0)1 53 76 05 00</a></div>
-        <div className="footer-bottom"><span>© STARPHONE PARIS · NEW TECHNOLOGY EUROPE</span><button className="admin-entry" onClick={() => goAdmin(true)} aria-label="Administration"><LockKeyhole size={12} /> ADMIN</button><div className="footer-socials"><a className="social-link" href="https://www.instagram.com/starphone_paris/" target="_blank" rel="noreferrer" aria-label="Instagram Starphone Paris"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".7" fill="currentColor" /></svg><span>INSTAGRAM</span><ArrowUpRight size={11} /></a><a className="social-link" href="https://www.tiktok.com/@starphone.paris" target="_blank" rel="noreferrer" aria-label="TikTok Starphone Paris"><Music2 size={14} /><span>TIKTOK</span><ArrowUpRight size={11} /></a></div></div>
+        <div className="footer-hours"><span>Lun — Sam</span><span>9h30 — 19h30</span><a href="tel:+33153760500">+33 (0)1 53 76 05 00</a></div>
+        <div className="footer-bottom"><span>© Starphone Paris · New Technology Europe</span><button className="admin-entry" onClick={() => goAdmin(true)} aria-label="Administration"><LockKeyhole size={12} /> Admin</button><div className="footer-socials"><a className="social-link" href="https://www.instagram.com/starphone_paris/" target="_blank" rel="noreferrer" aria-label="Instagram Starphone Paris"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".7" fill="currentColor" /></svg><span>Instagram</span><ArrowUpRight size={11} /></a><a className="social-link" href="https://www.tiktok.com/@starphone.paris" target="_blank" rel="noreferrer" aria-label="TikTok Starphone Paris"><Music2 size={14} /><span>Tiktok</span><ArrowUpRight size={11} /></a></div></div>
       </footer>
 
       {selected && <div className="lightbox" role="dialog" aria-modal="true" aria-label={selected.name} onClick={() => setSelected(null)} onKeyDown={(event) => { if (event.key === 'Escape') setSelected(null) }}>
@@ -260,10 +275,13 @@ function CollectionColumn({ title, subtitle, label, products, loading, error, pr
       : error ? <div className="empty-state"><p>Impossible de charger la collection.</p><span>{error}</span></div>
       : loading ? <div className="empty-state"><LoaderCircle className="spin" size={20} /><span>Chargement de la collection…</span></div>
       : products.length === 0 ? <div className="empty-state"><Sparkles size={18} /><p>Une collection en mouvement.</p><span>Les prochaines pièces seront dévoilées ici.</span></div>
-      : <div className="product-grid">{products.map((product) => <button className="product-card" key={product.id} onClick={() => onSelect(product)} aria-label={`Voir ${product.name}`}>
-        <span className="product-image"><img src={product.variants?.find((variant) => variant.id === product.default_variant_id)?.image_url ?? product.image_url} alt="" loading="lazy" /><span className="image-open"><ArrowUpRight size={16} /></span></span>
-        <span className="product-info"><span>{product.name}</span>{priced && product.price != null && <span className="product-price">{currency.format(product.price)}</span>}</span>
-      </button>)}</div>}
+      : <div className="product-grid">{products.map((product) => <article className="product-card" key={product.id}>
+        <button className="product-card-main" onClick={() => onSelect(product)} aria-label={`Voir ${product.name}`}>
+          <span className="product-image"><img src={product.variants?.find((variant) => variant.id === product.default_variant_id)?.image_url ?? product.image_url} alt="" loading="lazy" /><span className="image-open"><ArrowUpRight size={16} /></span></span>
+          <span className="product-info"><span>{product.name}</span>{priced && product.price != null && <span className="product-price">{currency.format(product.price)}</span>}</span>
+        </button>
+        {normalizePaymentUrl(product.payment_url) && <a className="product-buy-button" href={normalizePaymentUrl(product.payment_url) ?? undefined} target="_blank" rel="noopener noreferrer">Acheter</a>}
+      </article>)}</div>}
     <span className="column-decor" />
   </section>
 }
@@ -338,6 +356,7 @@ function AdminPanel({ configured, session, products, onBack, onSignOut, onSave, 
         <label className="upload-field">{imageName || (editing ? 'CHANGER L’IMAGE PRINCIPALE' : 'IMPORTER L’IMAGE PRINCIPALE')}<input type="file" name="image" accept="image/*" onChange={(event) => setImageName(event.target.files?.[0]?.name ?? '')} />{editing && !imageName && <small>Laisser vide pour conserver l’image actuelle. Avec des couleurs, choisissez la photo par défaut plus bas.</small>}</label>
         <label>Nom du produit<input name="name" defaultValue={editing?.name ?? ''} required placeholder="Ex. Casquette Starphone" /></label>
         <div className="form-row"><label>Prix en euros <span>(facultatif)</span><input name="price" type="number" min="0" step="0.01" defaultValue={editing?.price ?? ''} placeholder="Laisser vide pour prix sur demande" /></label><label>Catégorie<select name="category" defaultValue={editing?.category ?? 'priced'}><option value="priced">Produit avec prix</option><option value="unpriced">Produit sans prix</option></select></label></div>
+        <label>Lien de paiement <span>(facultatif, commun à toutes les couleurs)</span><input name="paymentUrl" type="url" defaultValue={editing?.payment_url ?? ''} placeholder="https://…" /></label>
         <label>Description<textarea name="description" rows={3} defaultValue={editing?.description ?? ''} placeholder="Présentez le produit et ce qui le rend unique." /></label>
         <label>Informations complémentaires<textarea name="details" rows={3} defaultValue={editing?.details ?? ''} placeholder="Matière, taille, entretien, livraison…" /></label>
         <section className="variant-editor" aria-label="Couleurs et variantes"><div className="variant-editor-heading"><div><h3>Couleurs & photos</h3><span>Facultatif · ajoutez une photo pour chaque couleur</span></div><button type="button" className="variant-add" onClick={addVariant}><Plus size={15} /> AJOUTER UNE COULEUR</button></div>
@@ -425,6 +444,7 @@ function ProductDetails({ product, selectedVariantId, onVariantChange }: {
       {product.description && <p className="detail-description">{product.description}</p>}
       {product.details && <div className="detail-information"><span>INFORMATIONS</span><p>{product.details}</p></div>}
       {variants.length > 0 && <fieldset className="variant-picker"><legend>Couleur{selectedVariant ? ` · ${selectedVariant.color}` : ''}</legend><div>{variants.map((variant) => <button key={variant.id} type="button" className={`variant-choice ${selectedVariant?.id === variant.id ? 'active' : ''}`} onClick={() => onVariantChange(variant.id)} aria-label={`Choisir ${variant.color}`} title={variant.color}><img src={variant.image_url} alt="" /><span>{variant.color}</span></button>)}</div></fieldset>}
+      {normalizePaymentUrl(product.payment_url) && <a className="product-buy-button product-detail-buy" href={normalizePaymentUrl(product.payment_url) ?? undefined} target="_blank" rel="noopener noreferrer">Acheter</a>}
     </div>
     {zoomOpen && createPortal(<div className="image-zoom-lightbox" role="dialog" aria-modal="true" aria-label={`Agrandissement de ${product.name}`} onClick={closeZoom}>
       <button type="button" className="image-zoom-close" aria-label="Fermer l’agrandissement" onClick={closeZoom}><X size={21} /></button>
