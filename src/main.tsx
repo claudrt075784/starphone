@@ -42,6 +42,24 @@ function App() {
   const [editing, setEditing] = useState<Product | null>(null)
   const [saving, setSaving] = useState(false)
   const [notice, setNotice] = useState('')
+  const cursorRef = useRef<HTMLSpanElement>(null)
+
+  useEffect(() => {
+    const moveCursor = (event: PointerEvent) => {
+      if (event.pointerType !== 'mouse' || !cursorRef.current) return
+      cursorRef.current.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`
+      cursorRef.current.classList.add('is-visible')
+    }
+    const hideCursor = () => cursorRef.current?.classList.remove('is-visible')
+    window.addEventListener('pointermove', moveCursor)
+    window.addEventListener('blur', hideCursor)
+    document.addEventListener('pointerleave', hideCursor)
+    return () => {
+      window.removeEventListener('pointermove', moveCursor)
+      window.removeEventListener('blur', hideCursor)
+      document.removeEventListener('pointerleave', hideCursor)
+    }
+  }, [])
 
   useEffect(() => {
     if (!supabase) {
@@ -83,6 +101,7 @@ function App() {
 
   const priced = products.filter((product) => product.price != null && product.category !== 'unpriced')
   const unpriced = products.filter((product) => product.price == null || product.category === 'unpriced')
+  const customCursor = createPortal(<span ref={cursorRef} className="starphone-cursor" aria-hidden="true">S</span>, document.body)
 
   const saveProduct = async (form: FormData): Promise<boolean> => {
     if (!supabase || !session) return false
@@ -177,13 +196,15 @@ function App() {
   }
 
   if (isAdmin) {
-    return <AdminPanel configured={!!supabase} session={session} products={products} onBack={() => goAdmin(false)}
+    return <>{customCursor}<AdminPanel configured={!!supabase} session={session} products={products} onBack={() => goAdmin(false)}
       onSignOut={async () => { if (supabase) await supabase.auth.signOut() }} onSave={saveProduct}
       onEdit={setEditing} onDelete={deleteProduct} editing={editing} onCancelEdit={() => setEditing(null)}
-      saving={saving} notice={notice} />
+      saving={saving} notice={notice} /></>
   }
 
   return (
+    <>
+    {customCursor}
     <main className="page-shell">
       <div className="star-field" aria-hidden="true">{Array.from({ length: 30 }, (_, index) =>
         <i key={index} style={{ '--x': `${(index * 67 + 13) % 100}%`, '--y': `${(index * 43 + 7) % 100}%`, '--delay': `${(index % 9) * -0.8}s`, '--size': `${index % 4 === 0 ? 5 : index % 3 === 0 ? 4 : 3}px` } as CSSProperties} />)}
@@ -225,6 +246,7 @@ function App() {
         <button className="lightbox-arrow next" aria-label="Produit suivant" onClick={(event) => { event.stopPropagation(); const list = selected.price !== null ? priced : unpriced; const index = list.findIndex((product) => product.id === selected.id); const nextProduct = list[(index + 1) % list.length] ?? selected; setSelected(nextProduct); setSelectedVariantId(nextProduct.default_variant_id ?? nextProduct.variants?.[0]?.id ?? '') }}><ChevronRight /></button>
       </div>}
     </main>
+    </>
   )
 }
 

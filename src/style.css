@@ -100,3 +100,5 @@
 .footer-socials{gap:20px}
 .footer-bottom .social-link{color:#f3f0e9}
 @media(max-width:700px){.topline{grid-template-columns:1fr auto}.topline-note{display:none}.topline-socials{gap:10px}.social-link{gap:4px;font-size:7px}.social-link svg{width:12px;height:12px}.footer-socials{gap:12px}.footer-socials .social-link{font-size:7px}}
+@media(hover:hover) and (pointer:fine){html,html *{cursor:none!important}.starphone-cursor{position:fixed;top:0;left:0;z-index:10000;pointer-events:none;user-select:none;visibility:hidden;opacity:0;color:#e8dcc5;font:42px/1 Vivaldi,'Italianno',cursive;text-shadow:0 0 12px #c7ac8266;transition:opacity .15s,transform .075s ease-out}.starphone-cursor.is-visible{visibility:visible;opacity:1}}
+@media(prefers-reduced-motion:reduce){.starphone-cursor{transition:opacity .15s}}
