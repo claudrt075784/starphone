@@ -209,7 +209,7 @@ function App() {
         <div className="footer-brand"><span className="brand footer-logo">Starphone<span>®</span></span><span className="footer-tagline">Le luxe d’être unique.</span><span className="footer-since">DEPUIS 1999</span></div>
         <div className="footer-address"><MapPin size={14} /><span>12 avenue Franklin D. Roosevelt<br />75008 Paris · Saint-Philippe-du-Roule</span></div>
         <div className="footer-hours"><span>LUN — SAM</span><span>9H30 — 19H30</span><a href="tel:+33153760500">+33 (0)1 53 76 05 00</a></div>
-        <div className="footer-bottom"><span>© STARPHONE PARIS · NEW TECHNOLOGY EUROPE</span><button className="admin-entry" onClick={() => goAdmin(true)} aria-label="Administration"><LockKeyhole size={12} /> ADMIN</button><a href="https://www.instagram.com/starphone_paris/" target="_blank" rel="noreferrer">SUIVRE NOTRE UNIVERS <ArrowUpRight size={11} /></a></div>
+        <div className="footer-bottom"><span>© STARPHONE PARIS · NEW TECHNOLOGY EUROPE</span><button className="admin-entry" onClick={() => goAdmin(true)} aria-label="Administration"><LockKeyhole size={12} /> ADMIN</button><a href="https://www.instagram.com/starphone_paris/" target="_blank" rel="noreferrer">INSTAGRAM <ArrowUpRight size={11} /></a><a href="https://www.tiktok.com/@starphone.paris" target="_blank" rel="noreferrer" aria-label="TikTok Starphone Paris">TIKTOK <ArrowUpRight size={11} /></a></div>
       </footer>
 
       {selected && <div className="lightbox" role="dialog" aria-modal="true" aria-label={selected.name} onClick={() => setSelected(null)} onKeyDown={(event) => { if (event.key === 'Escape') setSelected(null) }}>
