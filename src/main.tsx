@@ -228,7 +228,7 @@ function App() {
         <i className="shooting-star shooting-star-one" /><i className="shooting-star shooting-star-two" /><i className="shooting-star shooting-star-three" /><i className="shooting-star shooting-star-four" /><i className="shooting-star shooting-star-five" /><i className="shooting-star shooting-star-six" />
       </div>
       <header className="topline">
-        <a className="brand" href="/" aria-label="Starphone Paris, accueil"><span className="brand-initial">S</span>tarphone<span className="brand-reg">®</span></a>
+        <a className="brand" href="/" aria-label="Starphone Paris, accueil"><span className="brand-initial">S</span><img className="brand-initial-mobile" src="/vivaldi-s.png" alt="S" />tarphone<span className="brand-reg">®</span></a>
         <div className="topline-note"><span className="status-dot" /> Paris · depuis 1999</div>
         <div className="topline-socials">
           <a className="social-link" href="https://www.instagram.com/starphone_paris/" target="_blank" rel="noreferrer" aria-label="Instagram Starphone Paris"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".7" fill="currentColor" /></svg><span>Instagram</span><ArrowUpRight size={12} /></a>
@@ -238,6 +238,7 @@ function App() {
 
       <section className="intro">
         <span className="intro-mark" aria-hidden="true">S</span>
+        <img className="intro-mark-mobile" src="/vivaldi-s.png" alt="" aria-hidden="true" />
         <h1>Le luxe <em>d’être unique.</em></h1>
         <a className="discover-link" href="#collection">Découvrir la collection <ArrowDown size={14} /></a>
         <div className="intro-index">48°52′ N<br />02°18′ E</div>
@@ -249,10 +250,10 @@ function App() {
       </section>
 
       <footer className="footer">
-        <div className="footer-brand"><span className="brand footer-logo"><span className="brand-initial">S</span>tarphone<span className="brand-reg">®</span></span><span className="footer-tagline">Le luxe d’être unique.</span><span className="footer-since">Depuis 1999</span></div>
+        <div className="footer-brand"><span className="brand footer-logo"><span className="brand-initial">S</span><img className="brand-initial-mobile" src="/vivaldi-s.png" alt="S" />tarphone<span className="brand-reg">®</span></span><span className="footer-tagline">Le luxe d’être unique.</span><span className="footer-since">Depuis 1999</span></div>
         <div className="footer-address"><MapPin size={14} /><span className="footer-address-copy"><span>12 av Franklin D. Roosevelt</span><span>75008 Paris</span><span>France</span><span><a href="tel:+33153760500">Tel +33153760500</a></span><span><a href="tel:+33612180224">Cell +33612180224</a></span><span>Métro :</span><span>St Philippe du Roule</span><span>ou</span><span>Franklin Roosevelt</span></span></div>
         <div className="footer-hours"><span>Lun — Sam</span><span>9h30 — 19h30</span></div>
-        <div className="footer-bottom"><span>© <span className="brand-initial">S</span>tarphone Paris · New Technology Europe</span><button className="admin-entry" onClick={() => goAdmin(true)} aria-label="Administration"><LockKeyhole size={12} /> Admin</button><div className="footer-socials"><a className="social-link" href="https://www.instagram.com/starphone_paris/" target="_blank" rel="noreferrer" aria-label="Instagram Starphone Paris"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".7" fill="currentColor" /></svg><span>Instagram</span><ArrowUpRight size={11} /></a><a className="social-link" href="https://www.tiktok.com/@starphone.paris" target="_blank" rel="noreferrer" aria-label="TikTok Starphone Paris"><Music2 size={14} /><span>Tiktok</span><ArrowUpRight size={11} /></a></div></div>
+        <div className="footer-bottom"><span>© <span className="brand-initial">S</span><img className="brand-initial-mobile" src="/vivaldi-s.png" alt="S" />tarphone Paris · New Technology Europe</span><button className="admin-entry" onClick={() => goAdmin(true)} aria-label="Administration"><LockKeyhole size={12} /> Admin</button><div className="footer-socials"><a className="social-link" href="https://www.instagram.com/starphone_paris/" target="_blank" rel="noreferrer" aria-label="Instagram Starphone Paris"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".7" fill="currentColor" /></svg><span>Instagram</span><ArrowUpRight size={11} /></a><a className="social-link" href="https://www.tiktok.com/@starphone.paris" target="_blank" rel="noreferrer" aria-label="TikTok Starphone Paris"><Music2 size={14} /><span>Tiktok</span><ArrowUpRight size={11} /></a></div></div>
       </footer>
 
       {selected && <div className="lightbox" role="dialog" aria-modal="true" aria-label={selected.name} onClick={() => setSelected(null)} onKeyDown={(event) => { if (event.key === 'Escape') setSelected(null) }}>

@@ -303,9 +303,42 @@
   margin-top: 0;
 }
 
+.brand-initial-mobile,
+.intro-mark-mobile {
+  display: none;
+}
+
 @media(max-width:700px) {
+  .brand .brand-initial,
+  .footer-bottom .brand-initial,
   .intro-mark {
-    margin-bottom: 8px;
-    font-size: clamp(68px, 16vw, 96px);
+    display: none;
+  }
+
+  .brand-initial-mobile {
+    display: inline-block;
+    width: 1.7em;
+    height: 1.43em;
+    object-fit: contain;
+    vertical-align: -0.2em;
+    margin-right: -2px;
+  }
+
+  .intro-mark-mobile {
+    display: block;
+    width: clamp(68px, 16vw, 96px);
+    height: auto;
+    aspect-ratio: 78 / 54;
+    margin: 0 auto 8px;
+  }
+}
+
+@media(max-width:700px) {
+  .lightbox-arrow.previous {
+    right: 96px;
+  }
+
+  .lightbox-arrow.next {
+    right: 52px;
   }
 }
